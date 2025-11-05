@@ -1,0 +1,63 @@
+====================================
+  LANGUARO WAITLIST PAGE
+====================================
+
+✅ Your waitlist page is ready!
+
+HOW TO VIEW:
+------------
+
+Simply double-click "index.html" to open in your browser.
+
+OR
+
+Use a local web server:
+  python -m http.server 8000
+  Then open: http://localhost:8000
+
+
+WHAT'S INCLUDED:
+----------------
+
+✓ Dark mode grayscale design (matches Languaro UI)
+✓ Single page, no scrolling needed
+✓ Responsive design (mobile, tablet, desktop)
+✓ Email signup form with validation
+✓ 6 feature highlights
+✓ Placeholder for software demo GIF
+✓ Languaro logo integrated
+✓ Smooth animations and interactions
+
+
+TO ADD YOUR DEMO GIF:
+---------------------
+
+1. Save your demo GIF as "demo.gif" in this folder
+2. Open index.html in a text editor
+3. Find the section with class "preview-placeholder"
+4. Replace it with:
+
+   <img src="demo.gif" alt="Languaro Demo" 
+        style="width: 100%; border-radius: 16px; 
+               border: 1px solid rgba(255, 255, 255, 0.15);">
+
+
+TO CONNECT TO YOUR BACKEND:
+----------------------------
+
+Edit script.js and replace the simulateAPICall function
+with your actual API endpoint. See README.md for details.
+
+
+DEPLOYMENT OPTIONS:
+-------------------
+
+• Netlify: Drag & drop this folder
+• Vercel: Run "vercel" in terminal
+• GitHub Pages: Push to GitHub and enable Pages
+• Any web hosting: Upload all files
+
+
+Questions? Check README.md for full documentation.
+
+====================================
