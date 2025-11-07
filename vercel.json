@@ -1,0 +1,49 @@
+{
+  "rewrites": [
+    {
+      "source": "/dash",
+      "destination": "/api/dash"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/dash",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "source": "/api/dash",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
+      ]
+    },
+    {
+      "source": "/api/metrics",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
+      ]
+    }
+  ]
+}
