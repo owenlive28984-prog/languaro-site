@@ -1,7 +1,7 @@
 // Server-side proxy to fetch telemetry data from the backend
 // This keeps the backend URL and any tokens secure (not exposed to clients)
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
     // Only allow GET requests
     if (req.method !== 'GET') {
         res.setHeader('Allow', ['GET']);

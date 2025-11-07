@@ -1,7 +1,7 @@
 // Private dashboard with HTTP Basic Authentication
 // Protected route - only accessible with correct username/password
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
     const hqUser = process.env.HQ_USER || 'admin';
     const hqPass = process.env.HQ_PASS || 'languaro2025';
 
