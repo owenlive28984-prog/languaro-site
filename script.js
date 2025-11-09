@@ -255,13 +255,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             })
                         });
                         
-                        const data = await response.json();
-                        
+                        let data = {};
+                        try {
+                            data = await response.json();
+                        } catch (err) {
+                            // ignore JSON parse errors so we can throw a clearer message below
+                        }
+
+                        if (!response.ok) {
+                            const message = data?.error || `Checkout failed (${response.status})`;
+                            throw new Error(message);
+                        }
+
                         if (data.url) {
                             // Redirect to Stripe Checkout
                             window.location.href = data.url;
                         } else {
-                            throw new Error('No checkout URL returned');
+                            throw new Error(data?.error || 'No checkout URL returned');
                         }
                     } catch (error) {
                         console.error('Checkout error:', error);
