@@ -23,7 +23,30 @@
             <p class="description">
                 Translate any text, anywhere on your computer. Instantly.
             </p>
+            <div class="hero-actions">
+                <button class="hero-cta" id="hero-cta">Try for Free</button>
+            </div>
         </header>
+
+        <!-- Demo Preview -->
+        <section class="demo-preview">
+            <div class="demo-container">
+                <div class="gif-placeholder">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                        <line x1="7" y1="2" x2="7" y2="22"></line>
+                        <line x1="17" y1="2" x2="17" y2="22"></line>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <line x1="2" y1="7" x2="7" y2="7"></line>
+                        <line x1="2" y1="17" x2="7" y2="17"></line>
+                        <line x1="17" y1="17" x2="22" y2="17"></line>
+                        <line x1="17" y1="7" x2="22" y2="7"></line>
+                    </svg>
+                    <p class="gif-text">Demo Animation Coming Soon</p>
+                    <p class="gif-subtext">See Languaro in action</p>
+                </div>
+            </div>
+        </section>
 
         <!-- Features Section -->
         <section class="features">
@@ -134,6 +157,112 @@
                             <p class="expanded-text">All translation history and preferences are stored locally on your computer. We don't collect usage data, track what you translate, or build user profiles. Your API keys stay encrypted on your machine. What you translate is nobody's business but yours.</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing" id="pricing">
+            <h2 class="pricing-title">Choose Your Plan</h2>
+            <p class="pricing-subtitle">Start free, upgrade anytime</p>
+            
+            <div class="pricing-grid">
+                <!-- Free Tier -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3 class="plan-name">Free</h3>
+                        <div class="plan-price">
+                            <span class="price">$0</span>
+                            <span class="period">/forever</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>10 translations per day</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>All features included</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>OCR & text translation</span>
+                        </div>
+                    </div>
+                    <button class="plan-btn plan-btn-free" data-plan="free">Get Started</button>
+                </div>
+
+                <!-- Monthly Tier -->
+                <div class="pricing-card pricing-card-popular">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="pricing-header">
+                        <h3 class="plan-name">Pro</h3>
+                        <div class="plan-price">
+                            <span class="price">$8.99</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>500 translations/month</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Priority processing</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Premium support</span>
+                        </div>
+                    </div>
+                    <button class="plan-btn plan-btn-pro" data-plan="monthly" data-stripe-price="prod_TO86Hs5tsLWdWB">Choose Pro</button>
+                </div>
+
+                <!-- Lifetime Tier -->
+                <div class="pricing-card pricing-card-lifetime">
+                    <div class="lifetime-badge">🔥 Limited Time</div>
+                    <div class="pricing-header">
+                        <h3 class="plan-name">Lifetime</h3>
+                        <div class="plan-price">
+                            <span class="price">$49</span>
+                            <span class="period">once</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Unlimited translations</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Lifetime updates</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>One-time payment</span>
+                        </div>
+                    </div>
+                    <button class="plan-btn plan-btn-yearly" data-plan="Yearly" data-stripe-price="prod_TO8yjFx17gRtyU">Get Lifetime Access</button>
                 </div>
             </div>
         </section>

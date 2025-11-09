@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         feature.addEventListener('click', (e) => {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
-                
+
                 // Close other expanded features
                 features.forEach(f => {
                     if (f !== feature) {
@@ -184,9 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Smooth scroll to expanded feature
                 if (feature.classList.contains('expanded')) {
                     setTimeout(() => {
-                        feature.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'nearest' 
+                        feature.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest'
                         });
                     }, 100);
                 }
@@ -196,11 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Close expanded features when clicking outside
     document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768 && activeFeature) {
-            if (!e.target.closest('.feature')) {
-                features.forEach(f => f.classList.remove('expanded'));
-                activeFeature = null;
-            }
+        if (window.innerWidth <= 768 && activeFeature && !e.target.closest('.feature')) {
+            features.forEach(f => f.classList.remove('expanded'));
+            activeFeature = null;
         }
     });
 
@@ -209,8 +207,92 @@ document.addEventListener('DOMContentLoaded', () => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();
             emailInput.focus();
+            emailInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     });
+
+    // Handle pricing button clicks → Stripe checkout or scroll to waitlist
+    const pricingButtons = document.querySelectorAll('.plan-btn');
+    const waitlistSection = document.querySelector('.waitlist');
+    const heroCta = document.getElementById('hero-cta');
+    const pricingSection = document.getElementById('pricing');
+
+    if (pricingButtons.length) {
+        pricingButtons.forEach(button => {
+            button.addEventListener('click', async (e) => {
+                e.preventDefault();
+                
+                const plan = button.getAttribute('data-plan');
+                const stripePriceId = button.getAttribute('data-stripe-price');
+                
+                // Free plan - scroll to download or waitlist
+                if (plan === 'free') {
+                    if (waitlistSection) {
+                        waitlistSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                        setTimeout(() => emailInput.focus(), 600);
+                    }
+                    return;
+                }
+                
+                // Paid plans - redirect to Stripe Checkout
+                if (stripePriceId && stripePriceId !== 'price_xxx' && stripePriceId !== 'price_yyy') {
+                    // Show loading state
+                    button.disabled = true;
+                    const originalText = button.textContent;
+                    button.textContent = 'Loading...';
+                    
+                    try {
+                        // Call your checkout API
+                        const response = await fetch('/api/create-checkout', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                priceId: stripePriceId,
+                                plan: plan
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.url) {
+                            // Redirect to Stripe Checkout
+                            window.location.href = data.url;
+                        } else {
+                            throw new Error('No checkout URL returned');
+                        }
+                    } catch (error) {
+                        console.error('Checkout error:', error);
+                        alert('Unable to start checkout. Please try again or contact support.');
+                        button.disabled = false;
+                        button.textContent = originalText;
+                    }
+                } else {
+                    // Stripe not configured yet - scroll to waitlist
+                    if (waitlistSection) {
+                        waitlistSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                        setTimeout(() => emailInput.focus(), 600);
+                    }
+                }
+            });
+        });
+    }
+
+    if (heroCta && pricingSection) {
+        heroCta.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            pricingSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    }
 
     // Console easter egg
     console.log('%cLanguaro', 'font-size: 48px; font-weight: bold; color: #e6e6e6;');
