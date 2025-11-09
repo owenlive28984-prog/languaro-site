@@ -32,7 +32,7 @@ export default async function handler(req, res) {
                     quantity: 1,
                 },
             ],
-            mode: plan === 'monthly' ? 'subscription' : 'payment',
+            mode: (plan === 'monthly' || plan === 'yearly') ? 'subscription' : 'payment',
             success_url: `${req.headers.origin || 'https://languaro.com'}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${req.headers.origin || 'https://languaro.com'}/#pricing`,
             customer_email: body.email || undefined, // Pre-fill if provided
