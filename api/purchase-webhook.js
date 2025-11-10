@@ -31,6 +31,9 @@ export default async function handler(req, res) {
     }
 
     console.log('🔍 Webhook received, Supabase configured:', !!supabaseUrl);
+    console.log(
+        `🧭 Supabase service key source: ${keySource} (prefix: ${supabaseServiceRoleKey.slice(0, 8) || 'none'})`
+    );
 
     try {
         const body = await getRequestBody(req);
@@ -186,19 +189,35 @@ export default async function handler(req, res) {
 
 // Helper function to update user in Supabase
 async function updateSupabaseUser(supabaseUrl, supabaseServiceRoleKey, userData) {
-    const response = await fetch(
-        `${supabaseUrl.replace(/\/$/, '')}/rest/v1/users`,
-        {
-            method: 'POST',
+    const baseUrl = `${supabaseUrl.replace(/\/$/, '')}/rest/v1/users`;
+
+    let response = await fetch(baseUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            apikey: supabaseServiceRoleKey,
+            Authorization: `Bearer ${supabaseServiceRoleKey}`,
+            Prefer: 'resolution=merge-duplicates,return=representation',
+        },
+        body: JSON.stringify(userData),
+    });
+
+    if (!response.ok && response.status === 409 && userData.email) {
+        console.log('ℹ️  Duplicate detected, updating existing user instead');
+        const updatePayload = { ...userData };
+        delete updatePayload.email; // email used in filter below
+
+        response = await fetch(`${baseUrl}?email=eq.${encodeURIComponent(userData.email)}`, {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 apikey: supabaseServiceRoleKey,
                 Authorization: `Bearer ${supabaseServiceRoleKey}`,
-                Prefer: 'resolution=merge-duplicates,return=representation',
+                Prefer: 'return=representation',
             },
-            body: JSON.stringify(userData),
-        }
-    );
+            body: JSON.stringify(updatePayload),
+        });
+    }
 
     if (!response.ok) {
         const errorPayload = await safeJson(response);
