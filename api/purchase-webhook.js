@@ -12,7 +12,18 @@ export default async function handler(req, res) {
     }
 
     const supabaseUrl = process.env.SUPABASE_LICENSING_URL || process.env.SUPABASE_URL;
-    const supabaseServiceRoleKey = process.env.SUPABASE_LICENSING_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const supabaseServiceRoleKey =
+        process.env.SUPABASE_LICENSING_SERVICE_ROLE_KEY ||
+        process.env.SUPABASE_LICENSING_KEY ||
+        process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    const keySource = supabaseServiceRoleKey === process.env.SUPABASE_LICENSING_SERVICE_ROLE_KEY
+        ? 'SUPABASE_LICENSING_SERVICE_ROLE_KEY'
+        : supabaseServiceRoleKey === process.env.SUPABASE_LICENSING_KEY
+            ? 'SUPABASE_LICENSING_KEY'
+            : supabaseServiceRoleKey === process.env.SUPABASE_SERVICE_ROLE_KEY
+                ? 'SUPABASE_SERVICE_ROLE_KEY'
+                : 'unset';
 
     if (!supabaseUrl || !supabaseServiceRoleKey) {
         console.error('❌ Supabase environment variables not configured');
