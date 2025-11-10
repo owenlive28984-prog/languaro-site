@@ -11,8 +11,8 @@ export default async function handler(req, res) {
         return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
     }
 
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const supabaseUrl = process.env.SUPABASE_LICENSING_URL || process.env.SUPABASE_URL;
+    const supabaseServiceRoleKey = process.env.SUPABASE_LICENSING_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !supabaseServiceRoleKey) {
         console.error('❌ Supabase environment variables not configured');
