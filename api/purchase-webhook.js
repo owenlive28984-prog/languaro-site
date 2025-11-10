@@ -64,7 +64,6 @@ export default async function handler(req, res) {
                     await updateSupabaseUser(supabaseUrl, supabaseServiceRoleKey, {
                         email: email.trim().toLowerCase(),
                         is_pro: true,
-                        plan: determinePlanFromStripe(event),
                         activated_at: new Date().toISOString(),
                         subscription_expires_at: expiresAt.toISOString(),
                         purchase_data: {
@@ -143,11 +142,10 @@ export default async function handler(req, res) {
         // Fallback: Handle legacy Gumroad webhooks
         console.log('📬 Legacy webhook received');
         
-        let email, plan, purchaseData;
+        let email, purchaseData;
 
         if (body.email || body.purchaser?.email) {
             email = body.email || body.purchaser?.email;
-            plan = determinePlanFromGumroad(body);
             purchaseData = {
                 source: 'gumroad',
                 sale_id: body.sale_id,
@@ -168,7 +166,6 @@ export default async function handler(req, res) {
         await updateSupabaseUser(supabaseUrl, supabaseServiceRoleKey, {
             email,
             is_pro: true,
-            plan,
             activated_at: new Date().toISOString(),
             purchase_data: purchaseData,
         });
@@ -177,7 +174,6 @@ export default async function handler(req, res) {
             ok: true,
             message: 'Purchase processed successfully',
             email,
-            plan,
         });
     } catch (error) {
         console.error('❌ Webhook processing error:', error);
