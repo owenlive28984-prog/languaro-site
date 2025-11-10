@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/purchase-webhook.js": {
+      "maxDuration": 10
+    }
+  },
   "rewrites": [
     {
       "source": "/dash",
