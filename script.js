@@ -1,46 +1,48 @@
-// Waitlist form handling
+// Updates subscription handling
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('waitlist-form');
-    const emailInput = document.getElementById('email');
-    const submitBtn = form.querySelector('.submit-btn');
+    const form = document.getElementById('updates-form');
+    const emailInput = document.getElementById('updates-email');
+    const submitBtn = form ? form.querySelector('.submit-btn') : null;
     const formMessage = document.getElementById('form-message');
     const demoGif = document.querySelector('.demo-gif');
     const demoFrames = demoGif ? Array.from(demoGif.querySelectorAll('.demo-gif-frame')) : [];
     let demoTimer;
 
     // Form submission
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const email = emailInput.value.trim();
-        
-        // Validate email
-        if (!isValidEmail(email)) {
-            showMessage('Please enter a valid email address', 'error');
-            return;
-        }
-
-        // Show loading state
-        submitBtn.classList.add('loading');
-        formMessage.textContent = '';
-
-        try {
-            const result = await submitToWaitlist(email);
-
-            const successMessage = result?.message || "✓ Thank you! You've been added to the waitlist";
-            showMessage(successMessage.startsWith('✓') ? successMessage : `✓ ${successMessage}`, 'success');
-            emailInput.value = '';
+    if (form && emailInput && submitBtn) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
             
-            // Store in localStorage for demo purposes
-            addToLocalWaitlist(email);
+            const email = emailInput.value.trim();
             
-        } catch (error) {
-            const errorMessage = error?.message || 'Something went wrong. Please try again.';
-            showMessage(errorMessage, 'error');
-        } finally {
-            submitBtn.classList.remove('loading');
-        }
-    });
+            // Validate email
+            if (!isValidEmail(email)) {
+                showMessage('Please enter a valid email address', 'error');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.classList.add('loading');
+            if (formMessage) formMessage.textContent = '';
+
+            try {
+                const result = await submitSubscription(email);
+
+                const successMessage = result?.message || "✓ Thanks! You're subscribed";
+                showMessage(successMessage.startsWith('✓') ? successMessage : `✓ ${successMessage}`, 'success');
+                emailInput.value = '';
+                
+                // Store in localStorage for demo purposes
+                addToLocalSubscription(email);
+                
+            } catch (error) {
+                const errorMessage = error?.message || 'Something went wrong. Please try again.';
+                showMessage(errorMessage, 'error');
+            } finally {
+                submitBtn.classList.remove('loading');
+            }
+        });
+    }
 
     // Email validation
     function isValidEmail(email) {
@@ -63,16 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Submit email to Vercel serverless function (with local fallback when opened from filesystem)
-    async function submitToWaitlist(email) {
+    async function submitSubscription(email) {
         if (window.location.protocol === 'file:') {
             return {
                 ok: true,
-                message: 'Saved locally (deploy to Vercel to record submissions server-side).',
+                message: 'Saved locally (deploy to Vercel to record subscriptions server-side).',
                 localOnly: true
             };
         }
 
-        const response = await fetch('/api/waitlist', {
+        const response = await fetch('/api/subscribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -94,23 +96,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Store in localStorage (for demo purposes)
-    function addToLocalWaitlist(email) {
-        const waitlist = JSON.parse(localStorage.getItem('languaro-waitlist') || '[]');
+    function addToLocalSubscription(email) {
+        const subs = JSON.parse(localStorage.getItem('languaro-subscribers') || '[]');
         
-        if (!waitlist.includes(email)) {
-            waitlist.push(email);
-            localStorage.setItem('languaro-waitlist', JSON.stringify(waitlist));
+        if (!subs.includes(email)) {
+            subs.push(email);
+            localStorage.setItem('languaro-subscribers', JSON.stringify(subs));
         }
     }
 
     // Real-time email validation feedback
-    emailInput.addEventListener('input', () => {
-        if (emailInput.value && !isValidEmail(emailInput.value)) {
-            emailInput.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-        } else {
-            emailInput.style.borderColor = '';
-        }
-    });
+    if (emailInput) {
+        emailInput.addEventListener('input', () => {
+            if (emailInput.value && !isValidEmail(emailInput.value)) {
+                emailInput.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+            } else {
+                emailInput.style.borderColor = '';
+            }
+        });
+    }
 
     // Cycle demo GIF frames sequentially
     if (demoFrames.length > 1) {
@@ -229,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add keyboard shortcut (Ctrl/Cmd + K) to focus email input
     document.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k' && emailInput) {
             e.preventDefault();
             emailInput.focus();
             emailInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -238,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle pricing button clicks → Stripe checkout or scroll to waitlist
     const pricingButtons = document.querySelectorAll('.plan-btn');
-    const waitlistSection = document.querySelector('.waitlist');
+    const subscribeSection = document.querySelector('.subscribe');
     const heroCta = document.getElementById('hero-cta');
     const pricingSection = document.getElementById('pricing');
 
@@ -250,10 +254,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const plan = button.getAttribute('data-plan');
                 const stripePriceId = button.getAttribute('data-stripe-price');
                 
-                // Free plan - scroll to download or waitlist
+                // Free plan - scroll to subscription form
                 if (plan === 'free') {
-                    if (waitlistSection) {
-                        waitlistSection.scrollIntoView({
+                    if (subscribeSection && emailInput) {
+                        subscribeSection.scrollIntoView({
                             behavior: 'smooth',
                             block: 'center'
                         });
@@ -305,9 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         button.textContent = originalText;
                     }
                 } else {
-                    // Stripe not configured yet - scroll to waitlist
-                    if (waitlistSection) {
-                        waitlistSection.scrollIntoView({
+                    // Stripe not configured yet - scroll to subscription form
+                    if (subscribeSection && emailInput) {
+                        subscribeSection.scrollIntoView({
                             behavior: 'smooth',
                             block: 'center'
                         });

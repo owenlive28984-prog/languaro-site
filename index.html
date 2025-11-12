@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Languaro - Universal Translation for Your Desktop</title>
-    <meta name="description" content="Translate any text, anywhere on your desktop. Join the waitlist for early access to Languaro.">
+    <meta name="description" content="Translate any text, anywhere on your desktop. Get updates on Languaro releases, new features, and language support.">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -243,37 +243,56 @@
             </div>
         </section>
 
-        <!-- Waitlist Form -->
-        <section class="waitlist">
-            <h2>Join the Waitlist</h2>
-            <p class="waitlist-subtext">Get product updates, new features, and release news — including broader language support as it rolls out.</p>
-            
-            <form id="waitlist-form" class="waitlist-form">
+        <!-- Updates Subscription -->
+        <section class="subscribe">
+            <h2>Get Updates</h2>
+            <p class="waitlist-subtext">Subscribe for product updates, new features, and release news — including broader language support as it rolls out.</p>
+
+            <form id="updates-form" class="waitlist-form">
                 <div class="form-group">
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
+                    <input
+                        type="email"
+                        id="updates-email"
+                        name="email"
                         placeholder="Enter your email"
                         required
                         aria-label="Email address"
                     >
                     <button type="submit" class="submit-btn">
-                        <span class="btn-text">Join Waitlist</span>
+                        <span class="btn-text">Get Updates</span>
                         <span class="btn-loader"></span>
                     </button>
                 </div>
                 <p class="form-message" id="form-message"></p>
             </form>
+        </section>
 
-            <div class="platforms">
-                <span class="platform-label">Early Access:</span>
-                <div class="platform-badges">
-                    <span class="badge">Windows</span>
-                    <span class="badge badge-soon">macOS (coming soon)</span>
-                    <span class="badge badge-soon">Linux (coming soon)</span>
+        <!-- Compatibility -->
+        <section class="compat">
+            <h2>Compatibility</h2>
+            <p class="compat-subtext">Early access is available on Windows. macOS and Linux are coming very soon.</p>
+            <div class="compat-grid">
+                <div class="compat-card supported">
+                    <div class="compat-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8"/></svg>
+                    </div>
+                    <div class="compat-title">Windows</div>
+                    <div class="compat-tag">Supported</div>
                 </div>
-                <p class="platform-note">Currently Windows-only during early release. macOS and Linux arriving shortly.</p>
+                <div class="compat-card coming">
+                    <div class="compat-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2z"/></svg>
+                    </div>
+                    <div class="compat-title">macOS</div>
+                    <div class="compat-tag">Coming soon</div>
+                </div>
+                <div class="compat-card coming">
+                    <div class="compat-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+                    </div>
+                    <div class="compat-title">Linux</div>
+                    <div class="compat-tag">Coming soon</div>
+                </div>
             </div>
         </section>
 
