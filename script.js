@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('email');
     const submitBtn = form.querySelector('.submit-btn');
     const formMessage = document.getElementById('form-message');
+    const demoGif = document.querySelector('.demo-gif');
+    const demoFrames = demoGif ? Array.from(demoGif.querySelectorAll('.demo-gif-frame')) : [];
+    let demoTimer;
 
     // Form submission
     form.addEventListener('submit', async (e) => {
@@ -108,6 +111,28 @@ document.addEventListener('DOMContentLoaded', () => {
             emailInput.style.borderColor = '';
         }
     });
+
+    // Cycle demo GIF frames sequentially
+    if (demoFrames.length > 1) {
+        let currentIndex = demoFrames.findIndex(frame => frame.classList.contains('active'));
+        if (currentIndex < 0) currentIndex = 0;
+
+        const defaultDuration = parseInt(demoGif.dataset.defaultDuration, 10) || 7000;
+
+        const scheduleNextFrame = (delay) => {
+            clearTimeout(demoTimer);
+            demoTimer = setTimeout(() => {
+                demoFrames[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % demoFrames.length;
+                demoFrames[currentIndex].classList.add('active');
+                const nextDuration = parseInt(demoFrames[currentIndex].dataset.duration, 10) || defaultDuration;
+                scheduleNextFrame(nextDuration);
+            }, delay);
+        };
+
+        const initialDuration = parseInt(demoFrames[currentIndex].dataset.duration, 10) || defaultDuration;
+        scheduleNextFrame(initialDuration);
+    }
 
     // Add subtle parallax effect to hero section
     if (window.innerWidth > 768) {

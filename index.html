@@ -31,25 +31,18 @@
         <!-- Demo Preview -->
         <section class="demo-preview">
             <div class="demo-container">
-                <div class="gif-placeholder">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
-                        <line x1="7" y1="2" x2="7" y2="22"></line>
-                        <line x1="17" y1="2" x2="17" y2="22"></line>
-                        <line x1="2" y1="12" x2="22" y2="12"></line>
-                        <line x1="2" y1="7" x2="7" y2="7"></line>
-                        <line x1="2" y1="17" x2="7" y2="17"></line>
-                        <line x1="17" y1="17" x2="22" y2="17"></line>
-                        <line x1="17" y1="7" x2="22" y2="7"></line>
-                    </svg>
-                    <p class="gif-text">Demo Animation Coming Soon</p>
-                    <p class="gif-subtext">See Languaro in action</p>
+                <div class="demo-gif" data-default-duration="7000">
+                    <img src="1111.gif" alt="Languaro desktop translation demo part 1" class="demo-gif-frame active" data-duration="7000">
+                    <img src="1112.gif" alt="Languaro desktop translation demo part 2" class="demo-gif-frame" data-duration="7000">
                 </div>
             </div>
         </section>
 
         <!-- Features Section -->
         <section class="features">
+            <div class="callout">
+                <strong>Currently supporting Chinese, Japanese, and Korean.</strong> Our roadmap brings the full global language roster next.
+            </div>
             <div class="feature-grid">
                 <div class="feature" data-feature="ocr">
                     <div class="feature-header">
@@ -79,11 +72,11 @@
                             </svg>
                         </div>
                         <h3>Multi-Language Support</h3>
-                        <p class="feature-summary">Chinese, Japanese, Korean, Spanish, Arabic, and more</p>
+                        <p class="feature-summary">Chinese, Japanese, and Korean today — every language soon</p>
                     </div>
                     <div class="feature-expanded">
                         <div class="feature-expanded-inner">
-                            <p class="expanded-text">Specialized support for CJK languages with accurate character recognition and pronunciation guides. Lock your source language for consistent translations, or use auto-detect for flexibility. Advanced romanization with tone marks for Chinese, macrons for Japanese, and proper transliteration for Korean.</p>
+                            <p class="expanded-text">Specialized support for Chinese, Japanese, and Korean with accurate character recognition and pronunciation guides. Lock your source language for consistent translations, or use auto-detect for flexibility. Advanced romanization with tone marks for Chinese, macrons for Japanese, and proper transliteration for Korean. Additional languages are already in development.</p>
                         </div>
                     </div>
                 </div>
@@ -223,7 +216,7 @@
                             <span class="price">$59</span>
                             <span class="period">/year</span>
                         </div>
-                        <p class="pricing-subline"><strong>Save 45%</strong></p>
+                        <p class="pricing-subline"><strong>Save $49</strong></p>
                     </div>
                     <div class="pricing-features">
                         <div class="feature-item">
@@ -242,7 +235,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            <span>One-time payment</span>
+                            <span>Annual billing with priority support</span>
                         </div>
                     </div>
                     <button class="plan-btn plan-btn-lifetime" data-plan="yearly" data-stripe-price="price_1SRMgDBFKYiXK312BoFw0ytr">Choose Yearly</button>
@@ -253,7 +246,7 @@
         <!-- Waitlist Form -->
         <section class="waitlist">
             <h2>Join the Waitlist</h2>
-            <p class="waitlist-subtext">Be the first to know when Languaro launches</p>
+            <p class="waitlist-subtext">Get product updates, new features, and release news — including broader language support as it rolls out.</p>
             
             <form id="waitlist-form" class="waitlist-form">
                 <div class="form-group">
@@ -274,11 +267,13 @@
             </form>
 
             <div class="platforms">
-                <span class="platform-label">Available for:</span>
+                <span class="platform-label">Early Access:</span>
                 <div class="platform-badges">
                     <span class="badge">Windows</span>
-                    <span class="badge">macOS</span>
+                    <span class="badge badge-soon">macOS (coming soon)</span>
+                    <span class="badge badge-soon">Linux (coming soon)</span>
                 </div>
+                <p class="platform-note">Currently Windows-only during early release. macOS and Linux arriving shortly.</p>
             </div>
         </section>
 
