@@ -559,8 +559,8 @@ body {
     transform: translateY(0);
 }
 
-/* Subscribe Section */
-.subscribe {
+/* Waitlist Section */
+.waitlist {
     width: 100%;
     max-width: 600px;
     text-align: center;
@@ -571,7 +571,7 @@ body {
     animation: fadeIn 1.6s ease 0.8s backwards;
 }
 
-.subscribe h2 {
+.waitlist h2 {
     font-size: 2rem;
     font-weight: 700;
     color: var(--text-primary);

@@ -1,4 +1,4 @@
-// Updates subscription handling
+// Waitlist form handling
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('waitlist-form');
     const emailInput = document.getElementById('email');
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const result = await submitToWaitlist(email);
 
-                const successMessage = result?.message || "✓ Thanks! You're subscribed";
+                const successMessage = result?.message || "✓ Thank you! You've been added to the waitlist";
                 showMessage(successMessage.startsWith('✓') ? successMessage : `✓ ${successMessage}`, 'success');
                 emailInput.value = '';
                 
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.location.protocol === 'file:') {
             return {
                 ok: true,
-                message: 'Saved locally (deploy to Vercel to record subscriptions server-side).',
+                message: 'Saved locally (deploy to Vercel to record submissions server-side).',
                 localOnly: true
             };
         }
