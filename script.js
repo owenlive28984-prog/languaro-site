@@ -1,7 +1,7 @@
 // Updates subscription handling
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('updates-form');
-    const emailInput = document.getElementById('updates-email');
+    const form = document.getElementById('waitlist-form');
+    const emailInput = document.getElementById('email');
     const submitBtn = form ? form.querySelector('.submit-btn') : null;
     const formMessage = document.getElementById('form-message');
     const demoGif = document.querySelector('.demo-gif');
@@ -26,14 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (formMessage) formMessage.textContent = '';
 
             try {
-                const result = await submitSubscription(email);
+                const result = await submitToWaitlist(email);
 
                 const successMessage = result?.message || "✓ Thanks! You're subscribed";
                 showMessage(successMessage.startsWith('✓') ? successMessage : `✓ ${successMessage}`, 'success');
                 emailInput.value = '';
                 
                 // Store in localStorage for demo purposes
-                addToLocalSubscription(email);
+                addToLocalWaitlist(email);
                 
             } catch (error) {
                 const errorMessage = error?.message || 'Something went wrong. Please try again.';
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Submit email to Vercel serverless function (with local fallback when opened from filesystem)
-    async function submitSubscription(email) {
+    async function submitToWaitlist(email) {
         if (window.location.protocol === 'file:') {
             return {
                 ok: true,
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        const response = await fetch('/api/subscribe', {
+        const response = await fetch('/api/waitlist', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -96,12 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Store in localStorage (for demo purposes)
-    function addToLocalSubscription(email) {
-        const subs = JSON.parse(localStorage.getItem('languaro-subscribers') || '[]');
+    function addToLocalWaitlist(email) {
+        const waitlist = JSON.parse(localStorage.getItem('languaro-waitlist') || '[]');
         
-        if (!subs.includes(email)) {
-            subs.push(email);
-            localStorage.setItem('languaro-subscribers', JSON.stringify(subs));
+        if (!waitlist.includes(email)) {
+            waitlist.push(email);
+            localStorage.setItem('languaro-waitlist', JSON.stringify(waitlist));
         }
     }
 
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle pricing button clicks → Stripe checkout or scroll to waitlist
     const pricingButtons = document.querySelectorAll('.plan-btn');
-    const subscribeSection = document.querySelector('.subscribe');
+    const waitlistSection = document.querySelector('.waitlist');
     const heroCta = document.getElementById('hero-cta');
     const pricingSection = document.getElementById('pricing');
 
@@ -254,10 +254,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const plan = button.getAttribute('data-plan');
                 const stripePriceId = button.getAttribute('data-stripe-price');
                 
-                // Free plan - scroll to subscription form
+                // Free plan - scroll to waitlist
                 if (plan === 'free') {
-                    if (subscribeSection && emailInput) {
-                        subscribeSection.scrollIntoView({
+                    if (waitlistSection && emailInput) {
+                        waitlistSection.scrollIntoView({
                             behavior: 'smooth',
                             block: 'center'
                         });
@@ -309,9 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         button.textContent = originalText;
                     }
                 } else {
-                    // Stripe not configured yet - scroll to subscription form
-                    if (subscribeSection && emailInput) {
-                        subscribeSection.scrollIntoView({
+                    // Stripe not configured yet - scroll to waitlist
+                    if (waitlistSection && emailInput) {
+                        waitlistSection.scrollIntoView({
                             behavior: 'smooth',
                             block: 'center'
                         });

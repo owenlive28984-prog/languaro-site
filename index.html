@@ -32,8 +32,7 @@
         <section class="demo-preview">
             <div class="demo-container">
                 <div class="demo-gif" data-default-duration="7000">
-                    <img src="/gifs/1.gif" alt="Languaro desktop translation demo part 1" class="demo-gif-frame active" data-duration="7000">
-                    <img src="/gifs/2.gif" alt="Languaro desktop translation demo part 2" class="demo-gif-frame" data-duration="7000">
+                    <img src="/gifs/2.gif" alt="Languaro desktop translation demo" class="demo-gif-frame active" data-duration="7000">
                 </div>
             </div>
         </section>
@@ -206,60 +205,26 @@
                     </div>
                     <button class="plan-btn plan-btn-pro" data-plan="monthly" data-stripe-price="price_1SRLq4BFKYiXK312Hl1sprjM">Choose Pro</button>
                 </div>
-
-                <!-- Yearly Tier -->
-                <div class="pricing-card pricing-card-lifetime">
-                    <div class="lifetime-badge">🔥 Best Value</div>
-                    <div class="pricing-header">
-                        <h3 class="plan-name">Pro Yearly</h3>
-                        <div class="plan-price">
-                            <span class="price">$59</span>
-                            <span class="period">/year</span>
-                        </div>
-                        <p class="pricing-subline"><strong>Save $49</strong></p>
-                    </div>
-                    <div class="pricing-features">
-                        <div class="feature-item">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                            <span><strong>Unlimited translations</strong></span>
-                        </div>
-                        <div class="feature-item">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                            <span>Early access to new languages</span>
-                        </div>
-                        <div class="feature-item">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                            <span>Annual billing with priority support</span>
-                        </div>
-                    </div>
-                    <button class="plan-btn plan-btn-lifetime" data-plan="yearly" data-stripe-price="price_1SRMgDBFKYiXK312BoFw0ytr">Choose Yearly</button>
-                </div>
             </div>
         </section>
 
-        <!-- Updates Subscription -->
-        <section class="subscribe">
-            <h2>Get Updates</h2>
-            <p class="waitlist-subtext">Subscribe for product updates, new features, and release news — including broader language support as it rolls out.</p>
-
-            <form id="updates-form" class="waitlist-form">
+        <!-- Waitlist Form -->
+        <section class="waitlist">
+            <h2>Join the Waitlist</h2>
+            <p class="waitlist-subtext">Be the first to know when Languaro launches</p>
+            
+            <form id="waitlist-form" class="waitlist-form">
                 <div class="form-group">
-                    <input
-                        type="email"
-                        id="updates-email"
-                        name="email"
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
                         placeholder="Enter your email"
                         required
                         aria-label="Email address"
                     >
                     <button type="submit" class="submit-btn">
-                        <span class="btn-text">Get Updates</span>
+                        <span class="btn-text">Join Waitlist</span>
                         <span class="btn-loader"></span>
                     </button>
                 </div>

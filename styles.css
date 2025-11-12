@@ -545,21 +545,11 @@ body {
 }
 
 .plan-btn-pro {
-    background: var(--text-primary);
-    color: var(--bg-primary);
-}
-
-.plan-btn-pro:hover {
-    background: white;
-    transform: translateY(-1px);
-}
-
-.plan-btn-lifetime {
     background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
     color: white;
 }
 
-.plan-btn-lifetime:hover {
+.plan-btn-pro:hover {
     background: linear-gradient(135deg, #ff5252, #e63946);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
