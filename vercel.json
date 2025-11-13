@@ -6,6 +6,10 @@
   },
   "rewrites": [
     {
+      "source": "/success",
+      "destination": "/success.html"
+    },
+    {
       "source": "/dash",
       "destination": "/api/dash"
     }

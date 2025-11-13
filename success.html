@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Languaro – Purchase Complete</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .success-wrap { max-width: 720px; margin: 0 auto; padding-top: 4rem; padding-bottom: 4rem; }
+        .success-card { background: var(--bg-secondary); border: 1px solid var(--border-normal); border-radius: var(--radius-lg); padding: 2rem; text-align: center; }
+        .success-title { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+        .success-desc { color: var(--text-secondary); margin-bottom: 1rem; }
+        .success-status { color: var(--text-tertiary); min-height: 1.25rem; margin-top: 0.5rem; }
+        .success-actions { display: grid; gap: 0.5rem; margin-top: 1rem; }
+        .success-btn { display: inline-block; text-decoration: none; padding: 0.875rem 1.25rem; border-radius: var(--radius-sm); font-weight: 600; text-align: center; }
+        .success-btn-primary { background: linear-gradient(135deg, #ff6b6b, #ee5a6f); color: #fff; }
+        .success-btn-secondary { background: var(--accent-bg); color: var(--text-primary); border: 1px solid var(--border-normal); }
+    </style>
+</head>
+<body>
+    <div class="container success-wrap">
+        <div class="success-card">
+            <div class="logo-container" style="justify-content:center;margin-bottom:1rem;">
+                <img src="logo.png" alt="Languaro Logo" class="logo" style="animation:none;width:56px;height:56px;">
+            </div>
+            <h1 class="success-title">You're all set</h1>
+            <p class="success-desc">Finalizing your purchase. This takes a moment.</p>
+            <div id="status" class="success-status"></div>
+            <div class="success-actions">
+                <a href="/" class="success-btn success-btn-secondary">Back to website</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            function qs(k){return new URLSearchParams(window.location.search).get(k)}
+            const sessionId = qs('session_id') || qs('sessionId');
+            const status = document.getElementById('status');
+
+            async function confirm() {
+                if (!sessionId) {
+                    status.textContent = 'Missing session information. If you completed payment, please contact support.';
+                    return;
+                }
+                status.textContent = 'Confirming your purchase…';
+                try {
+                    const r = await fetch(`/api/confirm-checkout?session_id=${encodeURIComponent(sessionId)}`);
+                    const data = await r.json().catch(() => ({}));
+                    if (!r.ok || !data.ok) throw new Error(data.error || 'Unable to confirm purchase');
+                    status.textContent = 'Purchase confirmed. You can now unlock Pro in the app using your email.';
+                } catch (e) {
+                    status.textContent = 'We could not confirm your purchase automatically. If payment went through, please contact support using the button on the site.';
+                }
+            }
+
+            confirm();
+        })();
+    </script>
+</body>
+</html>
