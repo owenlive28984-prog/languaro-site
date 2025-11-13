@@ -125,6 +125,32 @@ body {
     margin: 0 auto;
 }
 
+.product-hunt-badge {
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    justify-content: center;
+    animation: fadeIn 1s ease 0.4s backwards;
+}
+
+.product-hunt-badge a {
+    display: inline-block;
+    transition: transform var(--transition-normal), opacity var(--transition-normal);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.product-hunt-badge a:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.product-hunt-badge img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
 .hero-actions {
     margin-top: var(--spacing-lg);
     display: flex;
@@ -970,6 +996,11 @@ input[type="email"]:focus {
     .platforms {
         flex-direction: column;
         gap: var(--spacing-xs);
+    }
+    
+    .product-hunt-badge img {
+        width: 200px !important;
+        height: auto !important;
     }
 }
 
