@@ -50,6 +50,7 @@
             function qs(k){return new URLSearchParams(window.location.search).get(k)}
             const plan = qs('plan');
             const priceId = qs('priceId');
+            const noCheckout = qs('noCheckout') === '1';
             const alreadyDownloaded = localStorage.getItem('languaro_installer_downloaded') === '1';
             const defaultUrl = '/downloads/LanguaroSetup.exe';
             const downloadUrl = document.body.getAttribute('data-download-url') || defaultUrl;
@@ -64,7 +65,7 @@
 
             if (plan === 'pro') {
                 continuePro.style.display = 'block';
-                title.textContent = alreadyDownloaded ? 'Ready to purchase Pro' : 'Downloading and starting Pro purchase…';
+                title.textContent = alreadyDownloaded ? 'Ready to purchase Pro' : (noCheckout ? 'Downloading Languaro…' : 'Downloading and starting Pro purchase…');
             } else {
                 title.textContent = alreadyDownloaded ? 'Installer already downloaded' : 'Downloading Languaro…';
             }
@@ -104,7 +105,7 @@
             }
 
             if (plan === 'pro' && priceId) {
-                if (!alreadyDownloaded) {
+                if (!alreadyDownloaded && !noCheckout) {
                     setTimeout(startCheckout, 1200);
                 }
                 continuePro.addEventListener('click', () => {

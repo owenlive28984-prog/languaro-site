@@ -226,30 +226,6 @@
             </div>
         </section>
 
-        <!-- Updates Form (UI copy only; backend unchanged) -->
-        <section class="waitlist">
-            <h2>Get Updates</h2>
-            <p class="waitlist-subtext">Get product updates, new features, and language support news</p>
-            
-            <form id="waitlist-form" class="waitlist-form">
-                <div class="form-group">
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        placeholder="Enter your email"
-                        required
-                        aria-label="Email address"
-                    >
-                    <button type="submit" class="submit-btn">
-                        <span class="btn-text">Get Updates</span>
-                        <span class="btn-loader"></span>
-                    </button>
-                </div>
-                <p class="form-message" id="form-message"></p>
-            </form>
-        </section>
-
         <!-- Compatibility -->
         <section class="compat">
             <h2>Compatibility</h2>
@@ -279,10 +255,56 @@
             </div>
         </section>
 
+        <!-- Updates Form (UI copy only; backend unchanged) -->
+        <section class="waitlist">
+            <h2>Get Updates</h2>
+            <p class="waitlist-subtext">Get product updates, new features, and language support news</p>
+            
+            <form id="waitlist-form" class="waitlist-form">
+                <div class="form-group">
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Enter your email"
+                        required
+                        aria-label="Email address"
+                    >
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-text">Get Updates</span>
+                        <span class="btn-loader"></span>
+                    </button>
+                </div>
+                <p class="form-message" id="form-message"></p>
+            </form>
+        </section>
+
         <!-- Footer -->
         <footer class="footer">
             <p>&copy; 2025 Languaro. All rights reserved.</p>
         </footer>
+    </div>
+
+    <div class="support-widget">
+        <button id="support-fab" class="support-fab" aria-label="Contact Support">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a4 4 0 0 1-4 4H8l-5 5V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+            </svg>
+            <span>Support</span>
+        </button>
+
+        <div id="support-panel" class="support-panel" aria-hidden="true">
+            <div class="support-header">
+                <div class="support-title">Contact Support</div>
+                <button id="support-close" class="support-close" aria-label="Close">×</button>
+            </div>
+            <form id="support-form" class="support-form" novalidate>
+                <input type="email" id="support-email" name="support-email" placeholder="Your email" required aria-label="Email address">
+                <textarea id="support-message" name="support-message" rows="5" placeholder="Describe the issue or feedback" required aria-label="Message"></textarea>
+                <button type="submit" class="support-submit">Send</button>
+                <div id="support-status" class="support-status"></div>
+            </form>
+        </div>
     </div>
 
     <script>

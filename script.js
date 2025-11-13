@@ -260,9 +260,49 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 
-                // Pro plan → download funnel then checkout
+                // Pro plan → open download info in new tab, prioritize checkout in current tab
                 if (stripePriceId && stripePriceId !== 'price_xxx' && stripePriceId !== 'price_yyy') {
-                    window.location.href = `/download.html?plan=pro&priceId=${encodeURIComponent(stripePriceId)}`;
+                    try {
+                        window.open(`/download.html?plan=pro&priceId=${encodeURIComponent(stripePriceId)}&noCheckout=1`, '_blank', 'noopener');
+                    } catch (_) {
+                        // ignore popup blockers; user still proceeds to checkout below
+                    }
+
+                    // Show loading state
+                    button.disabled = true;
+                    const originalText = button.textContent;
+                    button.textContent = 'Loading...';
+
+                    try {
+                        const response = await fetch('/api/create-checkout', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                priceId: stripePriceId,
+                                plan: plan // expected to be 'monthly'
+                            })
+                        });
+
+                        let data = {};
+                        try {
+                            data = await response.json();
+                        } catch (err) {
+                            // ignore JSON parse errors; handled below
+                        }
+
+                        if (!response.ok || !data?.url) {
+                            const message = data?.error || `Checkout failed (${response.status})`;
+                            throw new Error(message);
+                        }
+
+                        // Redirect to Stripe Checkout in current tab
+                        window.location.href = data.url;
+                    } catch (error) {
+                        console.error('Checkout error:', error);
+                        alert('Unable to start checkout. Please try again or contact support.');
+                        button.disabled = false;
+                        button.textContent = originalText;
+                    }
                 } else {
                     // Stripe not configured yet - scroll to waitlist
                     if (waitlistSection && emailInput) {
@@ -292,6 +332,118 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('%cLanguaro', 'font-size: 48px; font-weight: bold; color: #e6e6e6;');
     console.log('%cUniversal translation for your desktop', 'font-size: 16px; color: #bfbfbf;');
     console.log('%cInterested in joining our team? Email us at hello@languaro.com', 'font-size: 12px; color: #999999;');
+    
+    // Support widget: open/close and submit
+    const supportFab = document.getElementById('support-fab');
+    const supportPanel = document.getElementById('support-panel');
+    const supportClose = document.getElementById('support-close');
+    const supportForm = document.getElementById('support-form');
+    const supportEmail = document.getElementById('support-email');
+    const supportMessage = document.getElementById('support-message');
+    const supportStatus = document.getElementById('support-status');
+
+    function openSupport() {
+        if (!supportPanel) return;
+        supportPanel.classList.add('open');
+        supportPanel.setAttribute('aria-hidden', 'false');
+        if (supportEmail) supportEmail.focus();
+    }
+
+    function closeSupport() {
+        if (!supportPanel) return;
+        supportPanel.classList.remove('open');
+        supportPanel.setAttribute('aria-hidden', 'true');
+    }
+
+    if (supportFab) {
+        supportFab.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (supportPanel && supportPanel.classList.contains('open')) {
+                closeSupport();
+            } else {
+                openSupport();
+            }
+        });
+    }
+
+    if (supportClose) {
+        supportClose.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeSupport();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && supportPanel && supportPanel.classList.contains('open')) {
+            closeSupport();
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!supportPanel || !supportPanel.classList.contains('open')) return;
+        if (!e.target.closest('.support-panel') && !e.target.closest('#support-fab')) {
+            closeSupport();
+        }
+    });
+
+    if (supportForm) {
+        supportForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = supportEmail ? supportEmail.value.trim() : '';
+            const message = supportMessage ? supportMessage.value.trim() : '';
+
+            if (!email || !message) {
+                if (supportStatus) supportStatus.textContent = 'Please enter your email and a message.';
+                return;
+            }
+
+            const submitBtn = supportForm.querySelector('.support-submit');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+            }
+            if (supportStatus) supportStatus.textContent = '';
+
+            try {
+                if (window.location.protocol === 'file:') {
+                    if (supportStatus) supportStatus.textContent = 'This form needs to be tested on the deployed site.';
+                    return;
+                }
+
+                const response = await fetch('/api/support', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email,
+                        message,
+                        pageUrl: window.location.href,
+                        userAgent: navigator.userAgent
+                    })
+                });
+
+                let data = {};
+                try { data = await response.json(); } catch (_) {}
+
+                if (!response.ok || data?.ok === false) {
+                    const msg = data?.error || response.statusText || 'Unable to send right now.';
+                    throw new Error(msg);
+                }
+
+                if (supportStatus) supportStatus.textContent = 'Thanks — your message was sent.';
+                if (supportEmail) supportEmail.value = '';
+                if (supportMessage) supportMessage.value = '';
+                setTimeout(() => closeSupport(), 800);
+            } catch (err) {
+                if (supportStatus) supportStatus.textContent = err?.message || 'Something went wrong.';
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send';
+                }
+            }
+        });
+    }
 });
 
 // Add smooth reveal on page load
