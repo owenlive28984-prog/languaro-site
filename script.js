@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const result = await submitToWaitlist(email);
 
-                const successMessage = result?.message || "✓ Thank you! You've been added to the waitlist";
+                const successMessage = result?.message || "✓ Thanks! You'll receive updates via email";
                 showMessage(successMessage.startsWith('✓') ? successMessage : `✓ ${successMessage}`, 'success');
                 emailInput.value = '';
                 
@@ -254,60 +254,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const plan = button.getAttribute('data-plan');
                 const stripePriceId = button.getAttribute('data-stripe-price');
                 
-                // Free plan - scroll to waitlist
+                // Free plan → download funnel
                 if (plan === 'free') {
-                    if (waitlistSection && emailInput) {
-                        waitlistSection.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-                        setTimeout(() => emailInput.focus(), 600);
-                    }
+                    window.location.href = `/download.html?plan=free`;
                     return;
                 }
                 
-                // Paid plans - redirect to Stripe Checkout
+                // Pro plan → download funnel then checkout
                 if (stripePriceId && stripePriceId !== 'price_xxx' && stripePriceId !== 'price_yyy') {
-                    // Show loading state
-                    button.disabled = true;
-                    const originalText = button.textContent;
-                    button.textContent = 'Loading...';
-                    
-                    try {
-                        // Call your checkout API
-                        const response = await fetch('/api/create-checkout', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ 
-                                priceId: stripePriceId,
-                                plan: plan
-                            })
-                        });
-                        
-                        let data = {};
-                        try {
-                            data = await response.json();
-                        } catch (err) {
-                            // ignore JSON parse errors so we can throw a clearer message below
-                        }
-
-                        if (!response.ok) {
-                            const message = data?.error || `Checkout failed (${response.status})`;
-                            throw new Error(message);
-                        }
-
-                        if (data.url) {
-                            // Redirect to Stripe Checkout
-                            window.location.href = data.url;
-                        } else {
-                            throw new Error(data?.error || 'No checkout URL returned');
-                        }
-                    } catch (error) {
-                        console.error('Checkout error:', error);
-                        alert('Unable to start checkout. Please try again or contact support.');
-                        button.disabled = false;
-                        button.textContent = originalText;
-                    }
+                    window.location.href = `/download.html?plan=pro&priceId=${encodeURIComponent(stripePriceId)}`;
                 } else {
                     // Stripe not configured yet - scroll to waitlist
                     if (waitlistSection && emailInput) {

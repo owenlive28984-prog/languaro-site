@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Languaro – Download</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-download-url="/downloads/Languaro_0.1.0_x64-setup.exe">
+    <div class="container" style="min-height: auto; padding-top: 4rem; padding-bottom: 4rem;">
+        <header class="hero" style="margin-bottom: 1rem;">
+            <div class="logo-container">
+                <img src="logo.png" alt="Languaro Logo" class="logo">
+                <h1 class="brand">Languaro</h1>
+            </div>
+            <p class="tagline" id="download-title">Preparing your download…</p>
+            <p class="description" id="download-desc">Your download should start automatically. If it doesn’t, use the buttons below.</p>
+        </header>
+
+        <section class="waitlist" style="max-width: 800px;">
+            <h2>Before you open the installer</h2>
+            <div style="text-align: left; color: var(--text-secondary); display: grid; gap: 0.5rem;">
+                <p><strong>Windows SmartScreen:</strong> Because Languaro is new, Windows may show a SmartScreen warning.</p>
+                <ul style="margin-left: 1.25rem; display: grid; gap: 0.25rem;">
+                    <li>Click “More info”.</li>
+                    <li>Click “Run anyway”.</li>
+                </ul>
+                <p><strong>Browser protections:</strong> Some browsers flag new installers.</p>
+                <ul style="margin-left: 1.25rem; display: grid; gap: 0.25rem;">
+                    <li>Keep the file, then open it from your downloads.</li>
+                    <li>Languaro is safe and signed; warnings occur while we build reputation.</li>
+                </ul>
+            </div>
+
+            <div style="display: grid; gap: 0.5rem; margin-top: 1rem;">
+                <a id="download-link" class="plan-btn plan-btn-free" href="#" download>Re-download manually</a>
+                <button id="continue-pro" class="plan-btn plan-btn-pro" style="display: none;">Continue to Pro purchase</button>
+                <a href="/" class="plan-btn" style="background: var(--accent-bg); color: var(--text-primary); border: 1px solid var(--border-normal);">Back to website</a>
+            </div>
+            <p class="form-message" id="status" style="margin-top: 0.5rem;"></p>
+        </section>
+    </div>
+
+    <script>
+        (function() {
+            function qs(k){return new URLSearchParams(window.location.search).get(k)}
+            const plan = qs('plan');
+            const priceId = qs('priceId');
+            const alreadyDownloaded = localStorage.getItem('languaro_installer_downloaded') === '1';
+            const defaultUrl = '/downloads/LanguaroSetup.exe';
+            const downloadUrl = document.body.getAttribute('data-download-url') || defaultUrl;
+
+            const title = document.getElementById('download-title');
+            const desc = document.getElementById('download-desc');
+            const link = document.getElementById('download-link');
+            const continuePro = document.getElementById('continue-pro');
+            const status = document.getElementById('status');
+
+            link.href = downloadUrl;
+
+            if (plan === 'pro') {
+                continuePro.style.display = 'block';
+                title.textContent = alreadyDownloaded ? 'Ready to purchase Pro' : 'Downloading and starting Pro purchase…';
+            } else {
+                title.textContent = alreadyDownloaded ? 'Installer already downloaded' : 'Downloading Languaro…';
+            }
+
+            function triggerDownload() {
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = '';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                try { localStorage.setItem('languaro_installer_downloaded', '1'); } catch (e) {}
+            }
+
+            if (!alreadyDownloaded) {
+                triggerDownload();
+            } else {
+                status.textContent = 'Installer already downloaded. You can re-download manually if needed.';
+            }
+
+            async function startCheckout() {
+                if (!priceId) return;
+                status.textContent = 'Opening secure checkout…';
+                try {
+                    const response = await fetch('/api/create-checkout', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ priceId, plan: 'monthly' })
+                    });
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok || !data.url) throw new Error(data.error || 'Checkout failed');
+                    window.location.href = data.url;
+                } catch (err) {
+                    status.textContent = 'Unable to open checkout. Please try again.';
+                    continuePro.disabled = false;
+                }
+            }
+
+            if (plan === 'pro' && priceId) {
+                if (!alreadyDownloaded) {
+                    setTimeout(startCheckout, 1200);
+                }
+                continuePro.addEventListener('click', () => {
+                    continuePro.disabled = true;
+                    startCheckout();
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
